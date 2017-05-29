@@ -108,7 +108,11 @@ wss.on('connection', function(ws) {
            upstreamMap[wsUpstreamUrl].clients.forEach(function(s) {
              if (program.debug)
                console.log('e> ' + message.cyan);
-             s.send(message, function(err) {});
+             try {
+                 s.send(message, function(err) {});
+             } catch(err) {
+                 removeFromUpstreamMap();
+             }
            });
          } else {
            var idMap = upstreamMap[wsUpstreamUrl].localIdToRemote[msgObj.id];
